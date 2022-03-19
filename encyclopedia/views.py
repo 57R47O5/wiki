@@ -10,5 +10,10 @@ def index(request):
 # Aqui definimos la función "buscar". Por ahora nos envía a una página de prueba
 # Ahora le vamos a pasar un argumento
 def buscar(request, name):
-    return render(request, "encyclopedia/prueba.html", {"name":name})
-
+    entrada = util.get_entry(name)
+    if entrada != None:
+        return render(request, "encyclopedia/layout.html", {"entrada":entrada}) #Funciona Correctamente
+    else:
+        return render(request, "encyclopedia/error.html") # Funciona correctamente
+    
+# Aquí vamos a definir una función nueva, para buscar entradas
