@@ -1,0 +1,1 @@
+Contexto es algo que sirve para que tu programa no se vaya a la B

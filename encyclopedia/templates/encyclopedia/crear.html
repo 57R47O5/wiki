@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Crear nueva entrada</title>        
+    </head>
+    <body>
+        <h1>Crear nueva entrada</h1>
+        <form action="{% url 'encyclopedia:crear' %}" method="post">
+        <!--form action="crear" method="post"-->
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Enviar">
+        </form>
+    </body>
+</html>

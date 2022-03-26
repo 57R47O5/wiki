@@ -13,6 +13,9 @@ urlpatterns = [
     # Recibe los datos escritos en la form "buscar"
     path("recibir", views.recibir, name="recibir"),
 
+    # Crear nueva página
+    path("crear", views.crear, name="crear"),
+
     # Vamos a crear un path para una aplicacion de prueba
 
     path("prueba", views.prueba, name="prueba"),

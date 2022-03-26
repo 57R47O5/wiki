@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Tal vez quiso...</title>        
+    </head>
+    <body>
+        <h1>La palabra "{{datos}}" no  arrojó resultados</h1>
+        <h2>Tal vez quiso decir:</h2>
+        <ul>
+            {% for entry in entries %}
+                <li><a href="wiki/{{entry}}">{{ entry }}</a>  </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

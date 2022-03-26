@@ -1,0 +1,1 @@
+Yugioh es un juego de cartas coleccionables

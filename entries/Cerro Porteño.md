@@ -1,0 +1,1 @@
+Cerro Porteño es el mejor club del Paraguay
