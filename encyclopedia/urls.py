@@ -10,7 +10,7 @@ urlpatterns = [
       
     path("wiki/<str:name>", views.buscar, name="buscar"),
 
-    # De que forma enviar a views.recibir? Siempre va a views.buscar, porque es muy generico
+    # Recibe los datos escritos en la form "buscar"
     path("recibir", views.recibir, name="recibir"),
 
     # Vamos a crear un path para una aplicacion de prueba
