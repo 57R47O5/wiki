@@ -15,7 +15,8 @@ def index(request):
 # Aqui definimos la función "buscar". 
 def buscar(request, name):
     entrada = util.get_entry(name)
-    contexto = {"name":name, "entrada":entrada}
+    edit = 1                                                        # Esta bandera habilita el botón de edición
+    contexto = {"name":name, "entrada":entrada, "edit":edit}
     if entrada != None:
         return render(request, "encyclopedia/layout.html", contexto) 
     else:
@@ -50,10 +51,11 @@ def recibir(request):
 
 # Función que crea nuevas entradas
 def crear(request):
-    entrada = forms.AgregarEntradaForm                      # Creamos el form
-    context = {'form':entrada,}                             # Creamos el contexto
+    entrada = forms.AgregarEntradaForm                      # Creamos el form    
+    context = {'form':entrada,}                             # Creamos el contexto 
+    context.update({"datos":"invalidos"})                   # No estamos entrando aca
     if request.method == 'POST':                            # Si el método es un POST
-        entrada = forms.AgregarEntradaForm(request.POST)    # Llenamos los datos en el form        
+        entrada = forms.AgregarEntradaForm(request.POST)    # Llenamos los datos en el form   
         if entrada.is_valid():                              # Validamos los datos
             datosentrada = entrada.cleaned_data
             context.update(datosentrada)
@@ -61,14 +63,28 @@ def crear(request):
                 util.save_entry(datosentrada["titulo"],datosentrada["contenido"])
                 #return render(request, "encyclopedia/layout.html", context)
                 return index(request)
+            elif datosentrada["tipo"]=="Editar":
+                util.save_entry(datosentrada["titulo"],datosentrada["contenido"])                
+                return index(request)
             else:
-                return render(request, "encyclopedia/yaexiste.html", context)                            
-            #return HttpResponseRedirect('/Gracias/')
-        else:
+                return render(request, "encyclopedia/yaexiste.html", context)                                        
+        else:            
             return render(request, "encyclopedia/error.html")            
         return render(request, "encyclopedia/crear.html", context)
     else:
-        return render(request, "encyclopedia/crear.html", context)  # Estamos aquí
+        return render(request, "encyclopedia/crear.html", context)  
+
+
+# Aplicación para editar entradas
+def editar(request):    
+    datos = "Vacío"
+    entrada = "Todavía no hay nada"
+    if request.method == 'GET':                                   
+        datos = request.GET.get('entrada')                        # Recibimos los datos del get
+        entrada = util.get_entry(datos)                           # Guardamos en entrada
+    editarform = forms.AgregarEntradaForm(initial={'titulo':datos, 'contenido':entrada, "tipo":"Editar"})    
+    context = {'datos':datos, 'entrada':entrada, 'form':editarform}
+    return render(request, "encyclopedia/editar.html", context)
 
 
 def prueba(request):  

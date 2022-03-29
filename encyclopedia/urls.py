@@ -16,8 +16,10 @@ urlpatterns = [
     # Crear nueva página
     path("crear", views.crear, name="crear"),
 
-    # Vamos a crear un path para una aplicacion de prueba
+    # Editar página existente
+    path("editar", views.editar, name="editar"),
 
+    # Vamos a crear un path para una aplicacion de prueba
     path("prueba", views.prueba, name="prueba"),
 
     path("formulario", views.formulario, name="formulario")    
