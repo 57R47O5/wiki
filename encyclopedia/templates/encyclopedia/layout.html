@@ -24,7 +24,7 @@
                     <a href="{% url 'encyclopedia:crear' %}">Create New Page</a>
                 </div>
                 <div>
-                    Random Page
+                    <a href="{% url 'encyclopedia:aleatoria' %}">Random Page</a>    
                 </div>
                 <div>
                     {% if edit == 1 %}
@@ -40,7 +40,7 @@
             </div>
             <div class="main col-lg-10 col-md-9">
                 {% block body %}
-                {{entrada}}
+                {{entrada|safe}}   <!-- Se le pone el filtro "safe" para evitar el escaping-->
                 {% endblock %}
             </div>
         </div>

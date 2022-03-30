@@ -19,6 +19,9 @@ urlpatterns = [
     # Editar página existente
     path("editar", views.editar, name="editar"),
 
+    # Ir a página aleatoria
+    path("aleatoria", views.aleatoria, name="aleatoria"),
+
     # Vamos a crear un path para una aplicacion de prueba
     path("prueba", views.prueba, name="prueba"),
 

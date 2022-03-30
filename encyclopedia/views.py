@@ -2,7 +2,10 @@ from multiprocessing import context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from . import util, forms
+import random
+
+from . import markdown2
+from . import util, forms 
 
 # Definimos las funciones a usar
 
@@ -12,19 +15,20 @@ def index(request):
     })
 
 
-# Aqui definimos la función "buscar". 
-def buscar(request, name):
-    entrada = util.get_entry(name)
+# Esta función recibe el nombre de una entrada y devuelve una página con la entrada (Si existe)
+def buscar(request, name):    
+    entrada = markdown2.markdown(util.get_entry(name))
+    #entrada = util.get_entry(name)
     edit = 1                                                        # Esta bandera habilita el botón de edición
     contexto = {"name":name, "entrada":entrada, "edit":edit}
     if entrada != None:
         return render(request, "encyclopedia/layout.html", contexto) 
     else:
-        return render(request, "encyclopedia/error.html", contexto)        #Estamos entrando acá    
+        return render(request, "encyclopedia/error.html", contexto)          
 
     
-# Aquí vamos a definir una función nueva, para buscar entradas
-# Acá hay que solucionar. Los datos deben ir ya validados a Buscar
+
+# Esta función recibe el nombre de una entrada en la barra de búsqueda y devuelve la página con la entrada
 
 def recibir(request):    
     if request.method == 'GET':
@@ -52,8 +56,7 @@ def recibir(request):
 # Función que crea nuevas entradas
 def crear(request):
     entrada = forms.AgregarEntradaForm                      # Creamos el form    
-    context = {'form':entrada,}                             # Creamos el contexto 
-    context.update({"datos":"invalidos"})                   # No estamos entrando aca
+    context = {'form':entrada,}                             # Creamos el contexto     
     if request.method == 'POST':                            # Si el método es un POST
         entrada = forms.AgregarEntradaForm(request.POST)    # Llenamos los datos en el form   
         if entrada.is_valid():                              # Validamos los datos
@@ -62,10 +65,10 @@ def crear(request):
             if util.get_entry(datosentrada["titulo"]) == None:
                 util.save_entry(datosentrada["titulo"],datosentrada["contenido"])
                 #return render(request, "encyclopedia/layout.html", context)
-                return index(request)
+                return buscar(request, datosentrada["titulo"])
             elif datosentrada["tipo"]=="Editar":
                 util.save_entry(datosentrada["titulo"],datosentrada["contenido"])                
-                return index(request)
+                return buscar(request, datosentrada["titulo"])
             else:
                 return render(request, "encyclopedia/yaexiste.html", context)                                        
         else:            
@@ -86,6 +89,10 @@ def editar(request):
     context = {'datos':datos, 'entrada':entrada, 'form':editarform}
     return render(request, "encyclopedia/editar.html", context)
 
+def aleatoria(request):
+    lista = util.list_entries()                               # Creamos una lista con los nombres de las entradas
+    datos = random.choice(lista)                             # Elegimos un elemento aleatorio
+    return buscar(request, datos)                             # Ya listo      
 
 def prueba(request):  
     if request.method == 'GET':     # Los datos se reciben. Ahora es necesario almacenarlos en una variable
